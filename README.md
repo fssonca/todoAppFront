@@ -1,46 +1,114 @@
-# Getting Started with Create React App
+# Todo App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based Todo application that allows users to manage tasks efficiently with a clean and modern UI. The app supports user authentication, backend data persistence, task prioritization, and due date tracking.
 
-## Available Scripts
+## Demo
 
-In the project directory, you can run:
+The app is hosted on GitHub Pages:
+[https://fssonca.github.io/todoAppFront](https://fssonca.github.io/todoAppFront)
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Authentication**: 
+  - Users log in via email. A verification code is sent to the user's email to complete the login process, ensuring a secure and simple authentication flow.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- **Task Management**: 
+  - Users can manage their tasks by:
+    - Adding tasks with a name, description, priority, and an optional due date.
+    - Marking tasks as complete or pending.
+    - Deleting tasks they no longer need.
+  - All tasks are persisted in a backend system, ensuring data consistency and availability across sessions.
 
-### `npm test`
+- **Task Filtering**: 
+  - Users can filter tasks by status:
+    - **All**: View all tasks.
+    - **Pending**: View only tasks that are not completed.
+    - **Completed**: View only tasks that are marked as done.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Priority Levels**: 
+  - Tasks can be assigned priority levels from `Lowest` to `Highest` to help users focus on what matters most.
 
-### `npm run build`
+- **Backend Integration**: 
+  - All task operations (add, complete, and delete) are synchronized with the backend, ensuring that changes are saved and reflected accurately across devices.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Responsive Design**: 
+  - The app is optimized for desktop and mobile devices, providing a seamless experience regardless of screen size.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Secure Data Handling**: 
+  - Authentication tokens are securely stored in `localStorage` to maintain session integrity while interacting with the backend APIs.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Technologies Used
 
-### `npm run eject`
+- **Frontend**: React, TypeScript, Redux Toolkit, TailwindCSS
+- **Backend**: AWS Lambda, DynamoDB
+- **API**: Axios for HTTP requests
+- **State Management**: Redux with Thunks for async actions
+- **Testing**: Jest, React Testing Library
+- **Icons**: SVG-based assets for loading, checkmark, and delete actions.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Getting Started
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Prerequisites
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- Node.js and npm installed locally.
+- AWS account configured with DynamoDB tables: `Users` and `Todos`.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Installation
 
-## Learn More
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/fssonca/todoAppFront.git
+   cd todoAppFront
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. Create a `.env` file with the following variables:
+   ```dotenv
+   REACT_APP_API_BASE_URL=https://your-api-gateway-endpoint
+   ```
+
+4. Start the development server:
+   ```bash
+   npm start
+   ```
+
+5. Build for production:
+   ```bash
+   npm run build
+   ```
+
+## Folder Structure
+
+- `src/components`: React components (AddTodo, TodoItem, LoginForm, VerifyEmail, etc.)
+- `src/redux`: Redux slices (`todoSlice.ts`, `userSlice.ts`) and store configuration.
+- `src/api`: API abstraction layer (`todoApi.ts`).
+- `src/assets`: Icons and other static assets.
+
+## API Endpoints
+
+### Base URL
+`{API_BASE_URL}`
+
+### Endpoints
+- `POST /login`: Sends a verification code to the user's email.
+- `POST /verify-email`: Verifies the code and returns an auth token.
+- `GET /todos`: Fetches the user's todos.
+- `POST /todos`: Creates a new todo.
+- `PATCH /todos/{id}`: Updates a todo.
+- `DELETE /todos/{id}`: Deletes a todo.
+
+
+## Tests
+
+Run unit tests:
+```bash
+npm test
+```
+
+## License
+
+This project is licensed under the MIT License.
