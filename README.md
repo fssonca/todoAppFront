@@ -4,8 +4,8 @@ A React-based Todo application that allows users to manage tasks efficiently wit
 
 ## Demo
 
-The app is hosted on GitHub Pages:
-[https://fssonca.github.io/todoAppFront](https://fssonca.github.io/todoAppFront)
+The app is hosted on Netlify:
+https://fssonca-todoapp.netlify.app/
 
 ## Features
 
