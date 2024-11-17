@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../redux/store";
-import { fetchTodos, setFilter, Filter } from "../redux/todoSlice";
+import { fetchTodosThunk, setFilter, Filter } from "../redux/todoSlice";
 import TodoItem from "./TodoItem";
 import AddTodo from "./AddTodo";
 import FilterButtons from "./FilterButtons";
@@ -14,7 +14,7 @@ const TodoList: React.FC = () => {
 
   // Fetch todos on component mount
   useEffect(() => {
-    dispatch(fetchTodos());
+    dispatch(fetchTodosThunk());
   }, [dispatch]);
 
   const filteredTodos = todos.filter((todo) => {
