@@ -1,20 +1,28 @@
 import axios from "axios";
 import { API_BASE_URL } from "../utils/constants";
 
-function getAuthHeaders() {
-  const jwtToken = localStorage.getItem("authToken");
-  return {
-    Authorization: `Bearer ${jwtToken}`,
-    "Content-Type": "application/json",
-  };
-}
-
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  headers: getAuthHeaders(),
 });
 
-// interceptor to handle responses
+// Request interceptor to dynamically add the JWT token to headers
+axiosInstance.interceptors.request.use(
+  (config) => {
+    // Dynamically get the authentication token and add it to the headers
+    const jwtToken = localStorage.getItem("authToken");
+    if (jwtToken) {
+      config.headers.Authorization = `Bearer ${jwtToken}`;
+    }
+    config.headers["Content-Type"] = "application/json";
+    return config;
+  },
+  (error) => {
+    // Handle request errors
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor for error handling
 axiosInstance.interceptors.response.use(
   (response) => {
     // If the response is successful, simply return it
