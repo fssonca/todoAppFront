@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addTodo } from "../redux/todoSlice";
+import { addTodo, editTodo } from "../redux/todoSlice";
 import { saveTodo } from "../api/todoApi";
 
 const AddTodo: React.FC = () => {
@@ -20,8 +20,9 @@ const AddTodo: React.FC = () => {
         dueDate: dueDate ? dueDate : null, // Set to null if dueDate is empty
       };
 
-      // Dispatch to Redux to update the local state
-      dispatch(addTodo(newTodo));
+      // Generate a temporary ID and add to the Redux store
+      const tempTodoId = Date.now().toString();
+      dispatch(addTodo({ ...newTodo, tempTodoId }));
 
       // Reset the form fields
       setName("");
@@ -31,7 +32,14 @@ const AddTodo: React.FC = () => {
 
       try {
         // Save the new todo to the backend
-        await saveTodo(newTodo);
+        const response = await saveTodo(newTodo);
+
+        dispatch(
+          editTodo({
+            todoId: tempTodoId,
+            updates: { newTodoId: response.data.todoId },
+          })
+        );
       } catch (error) {
         console.error("Failed to save todo:", error);
       }

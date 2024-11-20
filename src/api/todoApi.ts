@@ -8,7 +8,6 @@ const axiosInstance = axios.create({
 // Request interceptor to dynamically add the JWT token to headers
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Dynamically get the authentication token and add it to the headers
     const jwtToken = localStorage.getItem("authToken");
     if (jwtToken) {
       config.headers.Authorization = `Bearer ${jwtToken}`;
@@ -63,4 +62,17 @@ export async function deleteTodo(todoId: string) {
   return axiosInstance.delete("/todos", {
     data: { todoId },
   });
+}
+
+export async function updateTodo(
+  todoId: string,
+  updates: {
+    name?: string;
+    description?: string;
+    priority?: number;
+    dueDate?: string | null;
+    completed?: boolean;
+  }
+) {
+  return axiosInstance.patch(`/todos/${todoId}`, updates);
 }

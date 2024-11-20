@@ -5,6 +5,7 @@ import { fetchTodosThunk, setFilter, Filter } from "../redux/todoSlice";
 import TodoItem from "./TodoItem";
 import AddTodo from "./AddTodo";
 import FilterButtons from "./FilterButtons";
+import EditTodoItem from "./EditTodoItem";
 
 const TodoList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -47,9 +48,13 @@ const TodoList: React.FC = () => {
           </div>
         ) : filteredTodos.length ? (
           <ul>
-            {filteredTodos.map((todo) => (
-              <TodoItem key={todo.todoId} {...todo} />
-            ))}
+            {filteredTodos.map((todo) =>
+              todo.isEditing ? (
+                <EditTodoItem key={todo.todoId} {...todo} />
+              ) : (
+                <TodoItem key={todo.todoId} {...todo} />
+              )
+            )}
           </ul>
         ) : (
           <div className="mt-10 w-full text-center italic text-slate-400">
