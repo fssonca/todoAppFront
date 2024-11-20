@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import AddTodo from "../components/AddTodo";
@@ -58,7 +58,9 @@ describe("AddTodo Component", () => {
   });
 
   it("dispatches an action and calls saveTodo when Add Todo is clicked", async () => {
-    (saveTodo as jest.Mock).mockResolvedValueOnce({}); // Mock API success
+    (saveTodo as jest.Mock).mockResolvedValueOnce({
+      data: { todoId: "12345" },
+    }); // Mock API success
 
     render(
       <Provider store={store}>
@@ -81,7 +83,10 @@ describe("AddTodo Component", () => {
     // Click the Add Todo button
     fireEvent.click(addButton);
 
-    // Assert that the Redux action was dispatched
+    // Wait for the async actions to complete
+    await waitFor(() => expect(saveTodo).toHaveBeenCalled());
+
+    // Assert that the Redux actions were dispatched
     const actions = store.getActions();
     expect(actions).toEqual([
       {
@@ -91,6 +96,14 @@ describe("AddTodo Component", () => {
           description: "Test Description",
           priority: 4,
           dueDate: null,
+          tempTodoId: expect.any(String),
+        },
+      },
+      {
+        type: "todos/editTodo",
+        payload: {
+          todoId: expect.any(String),
+          updates: { newTodoId: "12345" },
         },
       },
     ]);
