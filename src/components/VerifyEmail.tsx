@@ -41,7 +41,7 @@ const VerifyEmail: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="p-6 bg-white shadow-md rounded">
+      <div className="p-6 bg-white shadow-md rounded w-full max-w-sm">
         <h2 className="mb-4 text-xl font-bold text-center">
           Verify Your Email
         </h2>
@@ -50,7 +50,7 @@ const VerifyEmail: React.FC = () => {
         </p>
 
         <input
-          className="w-full p-2 mb-4 border rounded"
+          className="w-full p-2 mb-4 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           type="text"
           value={code}
           onChange={(e) => setCode(e.target.value)}
@@ -62,7 +62,7 @@ const VerifyEmail: React.FC = () => {
 
         <button
           onClick={handleVerify}
-          className="w-full px-4 py-2 text-white bg-blue-500 rounded flex justify-center items-center"
+          className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 transition disabled:bg-blue-300 flex justify-center items-center"
           disabled={isLoading}
         >
           {isLoading ? <LoadingIcon className="h-6" /> : "Verify"}

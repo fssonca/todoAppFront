@@ -25,3 +25,5 @@ export const mockAxiosResponse = <T>(data: T): AxiosResponse<T> => ({
     },
   } as InternalAxiosRequestConfig,
 });
+
+export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

@@ -5,8 +5,7 @@ import { login } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../utils/constants";
 import { ReactComponent as LoadingIcon } from "../assets/loading.svg";
-
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { emailRegex } from "../utils";
 
 const Register: React.FC = () => {
   const [name, setName] = useState("");
@@ -51,18 +50,20 @@ const Register: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="p-6 bg-white shadow-md rounded">
+      <div className="p-6 bg-white shadow-md rounded w-full max-w-sm">
         <h2 className="mb-4 text-xl font-bold text-center">Register</h2>
         <input
-          className="w-full p-2 mb-4 border rounded"
+          className="w-full p-2 mb-4 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Name"
         />
         <input
-          className={`w-full p-2 mb-2 border rounded ${
-            error ? "border-red-500" : "border-gray-300"
+          className={`w-full p-2 mb-2 border rounded focus:outline-none focus:ring-2 ${
+            error
+              ? "border-red-500 focus:ring-red-500"
+              : "border-gray-300 focus:ring-blue-500"
           }`}
           type="email"
           value={email}
@@ -76,8 +77,8 @@ const Register: React.FC = () => {
 
         <button
           onClick={handleRegister}
-          className="w-full px-4 h-10 text-white bg-green-500 rounded flex justify-center items-center"
-          disabled={isLoading || !!error}
+          className="w-full px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600 transition disabled:bg-green-300 flex justify-center items-center"
+          disabled={!email || isLoading || !!error}
         >
           {isLoading ? <LoadingIcon className="h-6" /> : "Register"}
         </button>
