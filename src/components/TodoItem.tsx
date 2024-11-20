@@ -1,7 +1,12 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
-import { toggleTodo, deleteTodoOptimistic } from "../redux/todoSlice";
+import {
+  toggleTodo,
+  deleteTodoOptimistic,
+  setEditingStatus,
+} from "../redux/todoSlice";
+import { ReactComponent as EditIcon } from "../assets/edit.svg";
 import { ReactComponent as CheckIcon } from "../assets/checkmark.svg";
 import { ReactComponent as TrashIcon } from "../assets/delete.svg";
 import { priorityConfig } from "../utils/constants";
@@ -45,6 +50,10 @@ const TodoItem: React.FC<TodoProps> = ({
     deleteTodo(todoId).catch((error) => {
       console.error("Failed to delete todo:", error);
     });
+  };
+
+  const handleEditToggle = () => {
+    dispatch(setEditingStatus({ todoId, isEditing: true }));
   };
 
   const {
@@ -94,6 +103,13 @@ const TodoItem: React.FC<TodoProps> = ({
             aria-label="Mark as complete"
           >
             <CheckIcon className="w-4 h-4 text-white" />
+          </button>
+          <button
+            onClick={handleEditToggle}
+            className="p-2 rounded"
+            aria-label="Edit task"
+          >
+            <EditIcon className="w-4 h-4 text-white" />
           </button>
           <button
             onClick={handleDelete}

@@ -8,6 +8,7 @@ interface Todo {
   priority: number;
   dueDate: string | null;
   completed: boolean;
+  isEditing: boolean;
 }
 
 export type Filter = "all" | "pending" | "completed";
@@ -54,15 +55,17 @@ const todoSlice = createSlice({
         description: string;
         priority?: number;
         dueDate?: string | null;
+        tempTodoId: string; // Temporary ID for optimistic update
       }>
     ) {
       const newTodo: Todo = {
-        todoId: Date.now().toString(),
+        todoId: action.payload.tempTodoId,
         name: action.payload.name,
         description: action.payload.description,
         priority: action.payload.priority ?? 1,
         dueDate: action.payload.dueDate ?? null,
         completed: false,
+        isEditing: false,
       };
       state.todos.push(newTodo);
       state.todos.sort((a, b) => b.priority - a.priority);
@@ -70,6 +73,44 @@ const todoSlice = createSlice({
     toggleTodo(state, action: PayloadAction<string>) {
       const todo = state.todos.find((todo) => todo.todoId === action.payload);
       if (todo) todo.completed = !todo.completed;
+    },
+    editTodo(
+      state,
+      action: PayloadAction<{
+        todoId: string;
+        updates: {
+          name?: string;
+          description?: string;
+          priority?: number;
+          dueDate?: string | null;
+          completed?: boolean;
+          newTodoId?: string; // To update the ID when saved on the backend
+        };
+      }>
+    ) {
+      const { todoId, updates } = action.payload;
+      const todo = state.todos.find((todo) => todo.todoId === todoId);
+
+      if (todo) {
+        // Apply updates to the todo
+        if (updates.name !== undefined) todo.name = updates.name;
+        if (updates.description !== undefined)
+          todo.description = updates.description;
+        if (updates.priority !== undefined) todo.priority = updates.priority;
+        if (updates.dueDate !== undefined) todo.dueDate = updates.dueDate;
+        if (updates.completed !== undefined) todo.completed = updates.completed;
+        if (updates.newTodoId !== undefined) todo.todoId = updates.newTodoId; // Update todoId when backend returns a new ID
+      }
+    },
+    setEditingStatus(
+      state,
+      action: PayloadAction<{ todoId: string; isEditing: boolean }>
+    ) {
+      const { todoId, isEditing } = action.payload;
+      const todo = state.todos.find((todo) => todo.todoId === todoId);
+      if (todo) {
+        todo.isEditing = isEditing;
+      }
     },
     deleteTodoOptimistic(state, action: PayloadAction<string>) {
       // Optimistically remove the todo from the list
@@ -100,6 +141,12 @@ const todoSlice = createSlice({
   },
 });
 
-export const { addTodo, toggleTodo, deleteTodoOptimistic, setFilter } =
-  todoSlice.actions;
+export const {
+  addTodo,
+  toggleTodo,
+  editTodo,
+  setEditingStatus,
+  deleteTodoOptimistic,
+  setFilter,
+} = todoSlice.actions;
 export default todoSlice.reducer;
